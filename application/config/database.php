@@ -81,7 +81,8 @@ if($_SERVER['HTTP_HOST'] == 'localhost')
 	$database = 'ruas';
 }else
 {
-	$hostname = 'sdb-61.hosting.stackcp.net';
+	$hostname = 'localhost';
+	//$hostname = 'sdb-61.hosting.stackcp.net';
 	$username = 'ruas_stud_management';
 	$password = 'k)M0£pRk+_K5';
 	$database = 'ruas_stud_management-35303237f0e7';
