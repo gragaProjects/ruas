@@ -36,10 +36,28 @@
      .error{
       color: red;
      }
-    .logo-default{
+     /*  */
+    .page-content-wrapper .page-content{
      
-
+         margin-left: 0px !important;
     }
-  
+
+    .page-container{
+      margin-top:0px !important;
+    }
+    @media (max-width: 991px){
+      .navbar-custom {
+        display: none;
+    }
+    }
+
+    .navbar-custom1 {
+     background: #fff !important; 
+    width: 100%;
+    text-align: unset !important;
+    height: 60px;
+    }
+
+   
      </style>
 

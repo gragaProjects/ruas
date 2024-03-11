@@ -40,20 +40,7 @@ class Admin extends CI_Controller {
 	{
 	    $this->checkLogin(); // Add this line to check login
 
-			//
-			// $query = $query = $this->db->get_where('announcement', array('isActive' => '1'));// $this->db->get('announcement');
-			// $announcement = $query->result();
-			//  $data['announcement'] = $announcement;
-
-			// $query1 = $this->db->get_where('event_card', array('isActive' => '1'));// $this->db->get('event_card');
-			// $announcement1 = $query1->result();
-			//  $data['card'] = $announcement1;
-
-			// $query2 = $this->db->get_where('events', array('isActive' => '1'));// $this->db->get('event_card');
-			// $announcement2 = $query2->result();
-			//  $data['events'] = $announcement2;
-			$data[] = '';
-	    $this->load->view('Backend/admin/ad-main-page',$data);
+	    $this->load->view('Backend/admin/ad-main-page');
 	}
 
 	public function Add_Navigator()
@@ -994,6 +981,124 @@ public function getPointsByID() {
 	echo json_encode($response);
 }
 
+//--------------------------------exam-results -------------------------------------- //
+public function ExamResults()
+{
+	$this->checkLogin();
+	
+	$query = $this->db->get('results');
+	$announcement = $query->result();
+	$data['announcement'] = $announcement;
+
+	$query2 = $this->db->get_where('results', array('isActive' => '1','student'=> $this->session->userdata('user_login_id')));
+	$announcement1 = $query2->result();
+	$data['announcement1'] = $announcement1;
+
+	$this->load->view('Backend/admin/exam-results',$data);
+}
+
+public function add_ExamResults() {
+	// Handle form submission to add a new time slot
+	$slot = $this->input->post('student');
+	$semester = $this->input->post('semester');
+	$percentage = $this->input->post('percentage');
+	$result = $this->input->post('result');
+	
+	// Check if a time slot with the same start_time and end_time already exists with isActive set to 1
+	$this->db->where('student', $slot);
+	$this->db->where('semester', $semester);
+
+	$this->db->where('isActive', 1);
+	$existingTimeSlot = $this->db->get('results')->row();
+
+	if ($existingTimeSlot) {
+		// Time slot with the same start_time and end_time already exists, return an error
+		echo json_encode(array('status' => 'error', 'message' => 'Data  already exists '));
+		return;
+	}
+
+	// Slot is available, proceed to insert
+	$data = array(
+		'student' => $this->input->post('student'),
+		'semester' => $this->input->post('semester'),
+		'percentage' => $this->input->post('percentage'),
+		'result' => $this->input->post('result'),
+	
+	);
+
+	
+	$success = $this->db->insert('results', $data);
+
+	if ($success) {
+		echo json_encode(array('status' => 'success', 'message' => 'Data saved successfully'));
+	} else {
+		echo json_encode(array('status' => 'error', 'message' => 'Failed to save data'));
+	}
+}
+
+
+	public function update_ExamResults() {
+	// Handle form submission to update an existing time slot
+	$id  =$this->input->post('id');
+	$data = array(
+		'student' => $this->input->post('student'),
+		'semester' => $this->input->post('semester'),
+		'percentage' => $this->input->post('percentage'),
+		'result' => $this->input->post('result')
+	
+	);
+
+	// Update data in the "time_slots" table
+	$this->db->where('id', $id);
+	$success =   $this->db->update('results', $data);
+
+	if ($success) {
+		
+		echo json_encode(array('status' => 'success', 'message' =>'Data updated successfully'));
+	} else {
+		echo json_encode(array('status' => 'error', 'message' => 'Failed to update data'));
+	}
+}
+
+public function delete_ExamResults() {
+	  $id  =$this->input->post('id');
+	// Delete a time slot from the "time_slots" table
+	$this->db->where('id', $id);
+	$success =   $this->db->delete('results');
+
+	if ($success) {
+		
+		echo json_encode(array('status' => 'success', 'message' =>'Deleted successfully'));
+	} else {
+		echo json_encode(array('status' => 'error', 'message' => 'Failed to delete data'));
+	}
+
+  
+}
+public function getExamResultsByID() {
+	// Get the ID parameter from the AJAX request
+	$id = $this->input->get('id');
+
+	// Retrieve time slot details directly in the controller
+	$this->db->where('id', $id);
+	$query = $this->db->get('results');
+	$timeSlot = $query->row();
+
+	// Prepare the response data as an array
+	$response = array(
+		'id' => $timeSlot->id,
+		
+		'student' => $timeSlot->student,
+		'semester' => $timeSlot->semester,
+		'percentage' => $timeSlot->percentage,
+		'result' => $timeSlot->result,
+		
+	);
+
+	// Send the response as JSON
+	echo json_encode($response);
+}
+
 //
 	//--------------------------------Event card -------------------------------------- //
 	public function event_card()
@@ -1196,168 +1301,6 @@ public function getPointsByID() {
 		echo json_encode($response);
 	}
 
-	// -------------------------register event ----------------------------------------
-	public function register_events() {
-		// Handle form submission to add a new time slot
-		// $slot = $this->input->post('title');
-		
 	
-	    // if($this->input->post('team')){
-		// 	$query = $this->db->get_where('leader_board', array('isActive' => '1','id'=>$this->input->post('team')));
-
-		// 	$result = $query->row();
-
-		// 	$team_color = $result->color;
-		// }else{
-		// 	$team_color = '';
-		// }
-		
-
-		// // Slot is available, proceed to insert
-		// $data = array(
-		// 	'title' => $this->input->post('title'),
-		// 	'start_date' => $this->input->post('startdate'),
-		// 	//'end_date' => $this->input->post('end_date'),
-		// 	'color' => $team_color,
-		// 	'desc' => $this->input->post('desc'),
-		// 	'userid' => $this->input->post('userid'),
-		
-		// );
-	
-		// if($this->input->post('id')){
-
-		// 	$this->db->where('id', $this->input->post('id'));
-		// 	$success =   $this->db->update('events', $data);
-
-		// 	if ($success) {
-		// 		echo json_encode(array('status' => 'success', 'message' => 'Data updated successfully'));
-		// 	} else {
-		// 		echo json_encode(array('status' => 'error', 'message' => 'Failed to save data'));
-		// 	}
-          
-		// }else{
-		// 		// Check if a time slot with the same start_time and end_time already exists with isActive set to 1
-		// $this->db->where('title', $slot);
-		// $this->db->where('start_date',  $this->input->post('startdate'));
-		// $this->db->where('userid', $this->input->post('userid'));
-	
-		// $this->db->where('isActive', 1);
-		// $existingTimeSlot = $this->db->get('events')->row();
-	
-		// if ($existingTimeSlot) {
-		// 	// Time slot with the same start_time and end_time already exists, return an error
-		// 	echo json_encode(array('status' => 'error', 'message' => 'Event  already exists '));
-		// 	return;
-		// }
-		
-		// 	$success = $this->db->insert('events', $data);
-
-			 /*Notification*/
-
-			 $userquery = $this->db->get_where('admin', array('isActive' => '1','id'=>$this->input->post('userid')));
-
-			 $userresult = $userquery->row();
-           //$this->input->post('title'),
-			 $filetitle = 'New Event Registered:<br> <strong style="color:black">Name :</strong> <span class="txt-name">'.$userresult->name .'</span><br>
-			 <strong style="color:black"> Title: </strong><span class="txt-name">'.$this->input->post('title') .'</span><br><strong style="color:black">Register:</strong>  <span class="txt-name">'.$this->input->post('desc') .'</span>
-			                 .';
-			 // foreach ($admin as $data) {
-			  $data = array(
-			  'userid' => $this->input->post('userid'),
-			  'title' => $filetitle,
-			  'desc' => $this->input->post('desc'),
-			  'created_at' => $this->input->post('startdate'),
-			  'status' => 'unread',
-			  'user_status' => '0',
-			  'admin_status' => '1',
-			//   'icon' => 'fa fa-comments-o',
-			//   'color' => 'blue-bgcolor',
-			  
-			  );
-			  $success =  $this->db->insert('notification', $data);
-
-			  
-			 /*Notification*/
-
-			if ($success) {
-				
-
-
-				echo json_encode(array('status' => 'success', 'message' => 'Register Successfully'));
-			} else {
-				echo json_encode(array('status' => 'error', 'message' => 'Failed to save data'));
-			}
-	//	}
-	
-	
-		
-	}
-
-	public function geteventregByID() {
-		// Get the ID parameter from the AJAX request
-		$id = $this->input->get('id');
-		$date = $this->input->get('date');
-
-		// Retrieve time slot details directly in the controller
-		$this->db->where( array('isActive' => '1','id'=>$id,'start_date'=>$date));
-		$query = $this->db->get('events');
-		$timeSlot = $query->row();
-
-		// print_r($date);
-		// print_r($timeSlot);
-
-
-		$query = $this->db->get_where('admin', array('isActive' => '1','id'=>$timeSlot->userid));
-
-		$result = $query->row();
-
-		
-
-		// Prepare the response data as an array
-		$response = array(
-			'id' => $timeSlot->id,
-			'title' => $timeSlot->title,
-			'desc' => $timeSlot->desc,
-			'team' => $result->team,
-			'startdate' => $timeSlot->start_date,
-			'userId' => $timeSlot->userid,
-			
-		);
-
-		// Send the response as JSON
-		echo json_encode($response);
-	 }
-	//  public function update_reg_event() {
-	// 	// Handle form submission to update an existing time slot
-	// 	$id  =$this->input->post('id');
-	// 	if($this->input->post('team')){
-	// 		$query = $this->db->get_where('leader_board', array('isActive' => '1','id'=>$this->input->post('team')));
-
-	// 		$result = $query->row();
-
-	// 		$team_color = $result->color;
-	// 	}else{
-	// 		$team_color = '';
-	// 	}
-	// 	$data = array(
-	// 		'title' => $this->input->post('title'),
-	// 		'start_date' => $this->input->post('startdate'),
-	// 		//'end_date' => $this->input->post('end_date'),
-	// 		'color' => $team_color,
-	// 		'desc' => $this->input->post('desc'),
-	// 		'userid' => $this->input->post('userid'),
-		
-	// 	);
-	// 	// Update data in the "time_slots" table
-	// 	$this->db->where('id', $id);
-	// 	$success =   $this->db->update('events', $data);
-	
-	// 	if ($success) {
-			
-	// 		echo json_encode(array('status' => 'success', 'message' =>'Data updated successfully'));
-	// 	} else {
-	// 		echo json_encode(array('status' => 'error', 'message' => 'Failed to update data'));
-	// 	}
-	// }
 	
 }

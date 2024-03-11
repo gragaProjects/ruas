@@ -9,14 +9,18 @@
     margin: 10px !important;">RUAS </span> </a>
                 </div>
                 <!-- logo end -->
-                <ul class="nav navbar-nav navbar-left in">
+                <!-- <ul class="nav navbar-nav navbar-left in">
                     <li><a href="#" class="menu-toggler sidebar-toggler"><i data-feather="menu"></i></a></li>
-                </ul>
+                </ul> -->
                 
                 <!-- start mobile menu -->
-                <a class="menu-toggler responsive-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
+                <!-- <a class="menu-toggler responsive-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
                     <span></span>
-                </a>
+                </a> -->
+
+                <a class="menu-toggler responsive-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-expanded="true">
+					<span></span>
+				</a>
 
 
                 <!-- end mobile menu -->
@@ -83,7 +87,72 @@
 
                     </ul>
                 </div>
+                  <!-- Header -->
+                <div class="navbar-custom" style="background: #fff !important; width: 100%; text-align: unset !important; height: 60px;">
+                <div class="hor-menu hidden-sm hidden-xs">
+					<ul class="nav navbar-nav">
+						<!-- <li class="mega-menu-dropdown active open">
+							<a href="" class="dropdown-toggle">  Dashboard
+								<i class="fa fa-angle-down"></i>
+								<span class="selected"></span>
+								<span class="arrow open"></span>
+							</a>
+							
+						</li> -->
+                        <li class="nav-item <?=  !$this->uri->segment(2)  ? 'active' : '' ?>">
+                                        <a href="<?php echo base_url(); ?>Admin/" class="nav-link ">  <span class="title">
+                                                Dashboard</span>
+                                        </a>
+                             </li>
+                          
+                             <?php  if($admin_data->user_status == '0') { ?>
+                             <li class="nav-item <?= $this->uri->segment(2) === 'Students' ? 'active' : '' ?>">
+                                        <a href="<?php echo base_url(); ?>Admin/Students" class="nav-link "> <span class="title">
+                                        Students</span>
+                                        </a>
+                                </li> 
+                             <?php }  ?>
+                           
+                     
+                             
+                            <!-- <?php  if($admin_data->user_status == '0') { ?> -->
+
+                                <li class="nav-item <?= $this->uri->segment(2) === 'All_Members' ? 'active' : '' ?>">
+                                        <a href="<?php echo base_url(); ?>Admin/All_Members" class="nav-link ">  <span class="title">
+                                        
+                                        Branches</span>
+                                        </a>
+                                 </li> 
+
+                            <!-- <?php } ?> -->
+                            <?php  if($admin_data->user_status == '0') { ?>
+
+                                <li class="nav-item <?= $this->uri->segment(2) === 'Points' ? 'active' : '' ?>">
+                                        <a href="<?php echo base_url(); ?>Admin/Points" class="nav-link ">  <span class="title">
+                                        
+                                       Fee Payments</span>
+                                        </a>
+                                 </li> 
+
+                            <?php } ?>
+                          
+
+                                <li class="nav-item <?= $this->uri->segment(2) === 'ExamResults' ? 'active' : '' ?>">
+                                        <a href="<?php echo base_url(); ?>Admin/ExamResults" class="nav-link ">  <span class="title">
+                                        
+                                        Exam Results</span>
+                                        </a>
+                                 </li> 
+
+                            
+
+					</ul>
+             </div>
+             </div>
+               <!-- Header -->
             </div>
+          
+            
         </div>
 
     <style type="text/css">

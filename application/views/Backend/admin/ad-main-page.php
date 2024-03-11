@@ -50,17 +50,21 @@
    
     margin: 15px -20px 0px !important;
 }
+.page-content-wrapper .page-content{
+     
+     margin-left: 0px !important;
+}
  </style>
 </head>
 <!-- END HEAD -->
 
 <body
-    class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md header-white white-sidebar-color logo-indigo">
+    class="page-header-fixed sidemenu-closed-hidelogo page-content-white page-md page-full-width header-white white-sidebar-color logo-indigo">
     <div class="page-wrapper">
         <!-- start header -->
         <!-- start header -->
          <?php $this->load->view('Backend/admin/admin-temp/header'); ?> 
-        <div class="page-container">
+        <div class="page-container" style="margin-top:0px !important;">
             <!-- start sidebar menu -->
             <?php $this->load->view('Backend/admin/admin-temp/sidebar'); ?> 
             <!-- end sidebar menu -->
